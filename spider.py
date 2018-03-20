@@ -1,7 +1,6 @@
 #!/usr/bin/python    
 #-*- coding:utf8 -*- 
 
-
 import getopt
 import sys    
 import threading
@@ -22,7 +21,7 @@ threads = []
 #用法         
 def usage():
     print    
-    print "Usage: python spider.py -u url -s dir -f dict.txt -o output.txt"    
+    print "Usage: python spider.py -u url -s dir -f dict.txt -o output.txt -t"    
     print "-s              - search api or dir"    
     print "-f              - dict file"    
     print "-o              - output the result"
@@ -113,10 +112,13 @@ class Spider():
         self.current_deepth = 1    #设置爬取的深度
     def getPageLinks(self,target):
         urllinks = []
-
+        #domainlink1 = ""
+        #domainlink2 = ""
         pageSource = requests.get(target).text
         pageLinks1 = re.findall(r'(?<=href=\").*?(?=\")|(?<=href=\').*?(?=\')|(?<=src=\").*?(?=\")|(?<=src=\').*?(?=\')',pageSource.lower())
         for m in pageLinks1:
+            #只爬取html|js|json|amsx|wsdl|xml
+            #if m.endswith(".html") or m.endswith(".xml") or m.endswith(".js") or m.endswith(".json") or m.endswith(".amsx") or m.endswith(".wsdl") or m.endswith(".php") or m.endswith(".asp") or m.endswith(".aspx") or m.endswith(".jsp"):
             if ".jpg" not in m and ".jpeg" not in m and ".png" not in m and ".gif" not in m and ".mp4" not in m and ".avi" not in m and ".swf" not in m and ".flv" not in m and ".ico" not in m and "javascript" not in m :#排除媒体文件
                 urllinks.append(m)
         
@@ -164,7 +166,7 @@ class Spider():
     def get_visitedUrl(self):
         while not self.linkQuence.unvisitedUrlEmpty():
             visitedUrl = self.linkQuence.popUnvisitedUrl()
-            print '------------visited------------：'+visitedUrl
+            print visitedUrl+'------------visited++++++++++++++'
             if visitedUrl is None or visitedUrl == '':
                 continue
             if dest_file:
@@ -194,7 +196,7 @@ class Spider():
 def dir_scan(target,dict_file):
     if len(target):
         with open(dict_file,"r") as myfiles:
-             for myfileurl in myfiles.readlines():
+            for myfileurl in myfiles.readlines():
                 myfileurl = myfileurl.strip("\n")
                 target =edit_str(target)
                 myfileurl = target+"/"+myfileurl
@@ -203,7 +205,6 @@ def dir_scan(target,dict_file):
                     print 'exist url--------：'+myfileurl
                     if dest_file:
                         save_file(myfileurl,dest_file)
-
 
 #写入文件
 def save_file(target,dest_file):
@@ -220,7 +221,6 @@ def main():
     global domain_url
     global th_number
     global threads
-
     try:
         opts,args =getopt.getopt(sys.argv[1:],"hu:s:f:o:t:",["help","url","search","dictfile","output","thread"])
     except getopt.GetoptError as err:    
