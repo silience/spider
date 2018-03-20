@@ -22,12 +22,13 @@ def edit_str(str):
 
 爬取规则：
 第一个无法爬取页面注释中的地址（<!--http://example.com/index.html-->）,第二个无法爬取相对路径和php?id=等类型的地址，古结合两种规则，并排除图片视频类的地址，最后再去重
-pageLinks1 = re.findall(r'(?<=href=\").*?(?=\")|(?<=href=\').*?(?=\')|(?<=src=\").*?(?=\")|(?<=src=\').*?(?=\')',pageSource.lower())
+        pageLinks1 = re.findall(r'(?<=href=\").*?(?=\")|(?<=href=\').*?(?=\')|(?<=src=\").*?(?=\")|(?<=src=\').*?(?=\')',pageSource.lower())
         for m in pageLinks1:
             if ".jpg" not in m and ".jpeg" not in m and ".png" not in m and ".gif" not in m and ".mp4" not in m and ".avi" not in m and ".swf" not in m and ".flv" not in m and ".ico" not in m and "javascript" not in m :#排除媒体文件
                 urllinks.append(m)
-#无法匹配相对路径的地址和php?id=等类型的地址
-pageLinks2 = re.findall(r'(http[^\s]:*?(\.html|\.js|\.json|\.amsx|\.wsdl|\.xml|\.jsp|\.php|\.asp|\.php|\.aspx))',pageSource.lower())
+        
+        #无法匹配相对路径的地址和php?id=等类型的地址
+        pageLinks2 = re.findall(r'(http[^\s]:*?(\.html|\.js|\.json|\.amsx|\.wsdl|\.xml|\.jsp|\.php|\.asp|\.php|\.aspx))',pageSource.lower())
         for n in xrange(0,len(pageLinks2)):
             if pageLinks2[n][0] not in urllinks:#判断是否已经存在
                 urllinks.append(pageLinks2[n][0])
