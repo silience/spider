@@ -1,6 +1,6 @@
 #!/usr/bin/python    
 #-*- coding:utf8 -*- 
-#http://blog.csdn.net/foryouslgme/article/details/52242653
+
 
 import getopt
 import sys    
